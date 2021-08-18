@@ -25,6 +25,7 @@ const upload = multer({
    },
 });
 const Car = require("../Models/Cars");
+const Image = require("../Models/Images");
 
 // Get all cars
 router.get("/", async (req, res) => {
@@ -48,7 +49,6 @@ router.get("/:id", async (req, res) => {
 
 // Create a new car
 router.post("/", verify, upload.single("carImage"), async (req, res) => {
-   console.log(req.file);
    const car = new Car({
       seatsNum: req.body.seatsNum,
       priceDay: req.body.priceDay,
@@ -57,10 +57,16 @@ router.post("/", verify, upload.single("carImage"), async (req, res) => {
       userId: req.body.userId,
    });
 
-   console.log(car);
+   const image = new Image({
+      imageName: req.file.filename,
+      carId: car._id,
+   });
+
    try {
       const savedCar = await car.save();
-      res.json(savedCar);
+      const savedImage = await image.save();
+
+      res.json({ savedCar, savedImage });
    } catch (err) {
       res.json({ message: err.message });
    }

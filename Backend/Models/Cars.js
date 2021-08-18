@@ -5,7 +5,7 @@ const CarsSchema = mongoose.Schema({
    priceDay: { type: Number, required: true },
    fuelType: { type: String, required: true },
    images: { type: String, required: true },
-   userId: String,
+   userId: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Cars", CarsSchema);
