@@ -29,8 +29,14 @@ const Image = require("../Models/Images");
 
 // Get all cars
 router.get("/", async (req, res) => {
+   let filters = {};
+
+   if (parseInt(req.body.roleId) === 2) {
+      filters = { ...filters, userId: req.body.userId };
+   }
+
    try {
-      const cars = await Car.find();
+      const cars = await Car.where(filters);
       res.json(cars);
    } catch (err) {
       res.json({ message: err.message });
