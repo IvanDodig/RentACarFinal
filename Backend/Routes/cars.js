@@ -31,10 +31,9 @@ const Image = require("../Models/Images");
 router.get("/", async (req, res) => {
    let filters = {};
 
-   if (parseInt(req.body.roleId) === 2) {
-      filters = { ...filters, userId: req.body.userId };
+   if (parseInt(req.query.roleId) === 2) {
+      filters = { ...filters, userId: req.query.userId };
    }
-
    try {
       const cars = await Car.where(filters);
       res.json(cars);
@@ -46,7 +45,7 @@ router.get("/", async (req, res) => {
 // Get specific car
 router.get("/:id", async (req, res) => {
    try {
-      const car = await Car.findById(req.params.postId);
+      const car = await Car.findById(req.params.carId);
       res.json(car);
    } catch (err) {
       res.json({ message: err.message });

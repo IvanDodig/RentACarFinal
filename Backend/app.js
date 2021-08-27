@@ -21,6 +21,18 @@ app.use("/cars", carsRoute);
 const reservationsRoute = require("./Routes/reservations");
 app.use("/reservations", reservationsRoute);
 
+const carBrandsRoute = require("./Routes/carBrands");
+app.use("/car-brands", carBrandsRoute);
+
+const brandModelsRoute = require("./Routes/brandModels");
+app.use("/brand-models", brandModelsRoute);
+
+const bodyTypesRoute = require("./Routes/bodyTypes");
+app.use("/body-types", bodyTypesRoute);
+
+const fuelTypesRoute = require("./Routes/fuelTypes");
+app.use("/fuel-types", fuelTypesRoute);
+
 // Connect to DB
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () => {
    console.log("connected to DB!");
