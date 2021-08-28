@@ -55,11 +55,22 @@ router.get("/:id", async (req, res) => {
 // Create a new car
 router.post("/", verify, upload.single("carImage"), async (req, res) => {
    const car = new Car({
+      brandId: req.body.brandId,
+      brandName: req.body.brandName,
+      modelId: req.body.modelId,
+      modelName: req.body.modelName,
+      fuelTypeId: req.body.fuelTypeId,
+      fuelTypeName: req.body.fuelTypeName,
+      bodyTypeId: req.body.bodyTypeId,
+      bodyTypeName: req.body.bodyTypeName,
       seatsNum: req.body.seatsNum,
+      doorsNum: req.body.doorsNum,
       priceDay: req.body.priceDay,
-      fuelType: req.body.fuelType,
-      images: req.file.filename,
+      enginePower: req.body.enginePower,
+      engineCapacity: req.body.engineCapacity,
       userId: req.body.userId,
+      userName: req.body.userName,
+      images: req.file.filename,
    });
 
    const image = new Image({
@@ -67,6 +78,7 @@ router.post("/", verify, upload.single("carImage"), async (req, res) => {
       carId: car._id,
    });
 
+   console.log(car.images, image);
    try {
       const savedCar = await car.save();
       const savedImage = await image.save();
