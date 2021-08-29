@@ -30,13 +30,30 @@ const Image = require("../Models/Images");
 // Get all cars
 router.get("/", async (req, res) => {
    let filters = {};
+   const pageIndex = req.query.pageIndex || 0;
 
    if (parseInt(req.query.roleId) === 2) {
       filters = { ...filters, userId: req.query.userId };
    }
+   if (req.query.brandId) {
+      filters = { ...filters, brandId: req.query.brandId };
+   }
+   if (req.query.modelId) {
+      filters = { ...filters, modelId: req.query.modelId };
+   }
+   if (req.query.bodyTypeId) {
+      filters = { ...filters, bodyTypeId: req.query.bodyTypeId };
+   }
+   if (req.query.fuelTypeId) {
+      filters = { ...filters, fuelTypeId: req.query.fuelTypeId };
+   }
    try {
-      const cars = await Car.where(filters);
-      res.json(cars);
+      const totalCount = await Car.count(filters);
+      const cars = await Car.where(filters)
+         .limit(3)
+         .skip(pageIndex * 3);
+
+      res.json({ cars, totalCount });
    } catch (err) {
       res.json({ message: err.message });
    }
@@ -78,7 +95,6 @@ router.post("/", verify, upload.single("carImage"), async (req, res) => {
       carId: car._id,
    });
 
-   console.log(car.images, image);
    try {
       const savedCar = await car.save();
       const savedImage = await image.save();
