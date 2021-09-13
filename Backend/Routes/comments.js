@@ -7,8 +7,9 @@ const Comment = require('../Models/Comments');
 
 // Get All comments
 router.get('/', async (req, res) => {
+	console.log('adsd');
 	try {
-		const comments = await Comment.find();
+		const comments = await Comment.where({ carId: req.query.carId });
 		res.json(comments);
 	} catch (error) {
 		res.json({ message: err.message });
@@ -27,7 +28,7 @@ router.get('/:id', async (req, res) => {
 
 // Create a new comment
 router.post('/', verify, async (req, res) => {
-	const comment = new comment({
+	const comment = new Comment({
 		text: req.body.text,
 		userName: req.body.userName,
 		userId: req.body.userId,
