@@ -57,6 +57,7 @@ router.get('/', async (req, res) => {
 	try {
 		const totalCount = await Car.count(filters);
 		const cars = await Car.where(filters)
+			.sort([['_id', -1]])
 			.limit(3)
 			.skip(pageIndex * 3);
 
