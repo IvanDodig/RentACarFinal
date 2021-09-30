@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 	let filters = {};
 
 	if (parseInt(req.query.roleId) === 2) {
-		filters = { ...filters, userId: req.query.ownerId };
+		filters = { ...filters, ownerId: req.query.ownerId };
 	}
 	if (parseInt(req.query.roleId) === 1) {
 		filters = { ...filters, userId: req.query.userId };
