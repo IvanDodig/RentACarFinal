@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../Models/Users');
+const Car = require('../Models/Cars');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { registerValidation, loginValidation } = require('../validation');
@@ -10,11 +11,11 @@ const { registerValidation, loginValidation } = require('../validation');
 router.post('/register', async (req, res) => {
 	// data validation
 	const { error } = registerValidation(req.body);
-	if (error) return res.status(400).send(error.details[0].message);
+	if (error) return res.status(409).send(error.details[0].message);
 
 	// check if user exists
 	const emailExist = await User.findOne({ email: req.body.email });
-	if (emailExist) return res.status(400).send('Email already exists');
+	if (emailExist) return res.status(409).send('Email se koristi');
 
 	// password hash
 	const salt = await bcrypt.genSalt(10);
@@ -59,6 +60,25 @@ router.post('/login', async (req, res) => {
 		roleId: user.roleId,
 		user: user,
 	});
+});
+
+router.get('/allusers', async (req, res) => {
+	try {
+		const allUsers = await User.find();
+		res.json(allUsers);
+	} catch (error) {
+		res.json({ message: err.message });
+	}
+});
+
+router.delete('/deleteuser/:id', async (req, res) => {
+	try {
+		const removedUser = await User.remove({ _id: req.params.id });
+		const removedCars = await Car.remove({ userId: req.params.id });
+		res.json({ removedUser, removedCars });
+	} catch (err) {
+		res.json({ message: err.message });
+	}
 });
 
 module.exports = router;
