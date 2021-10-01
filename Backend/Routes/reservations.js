@@ -55,10 +55,10 @@ router.post('/', verify, async (req, res) => {
 		});
 		if (validationOne || validationTwo) {
 			res.json({ error: 'Rezervacija je zauzeta' });
+		} else {
+			const savedReservation = await reservation.save();
+			res.json({ savedReservation });
 		}
-
-		const savedReservation = await reservation.save();
-		res.json({ savedReservation });
 	} catch (err) {
 		res.json({ message: err.message });
 	}
