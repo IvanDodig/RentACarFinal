@@ -40,6 +40,23 @@ router.post('/', verify, async (req, res) => {
 	});
 
 	try {
+		const validationOne = await Reservation.findOne({
+			dateFrom: {
+				$gte: req.body.dateFrom,
+				$lte: req.body.dateTo,
+			},
+		});
+
+		const validationTwo = await Reservation.findOne({
+			dateTo: {
+				$gte: req.body.dateFrom,
+				$lte: req.body.dateTo,
+			},
+		});
+		if (validationOne || validationTwo) {
+			res.json({ error: 'Rezervacija je zauzeta' });
+		}
+
 		const savedReservation = await reservation.save();
 		res.json({ savedReservation });
 	} catch (err) {
